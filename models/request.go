@@ -11,6 +11,7 @@ type Request struct {
 	Description      string `bson:"description" json:"description"`
 	TotalStock       int    `bson:"totalStock" json:"totalStock"`
 	UserID           string `bson:"userid" json:"userid"`
+	ImageLink        string `bson:"imageLink" json:"imageLink"`
 }
 
 // GetCollection return the collection of current request model

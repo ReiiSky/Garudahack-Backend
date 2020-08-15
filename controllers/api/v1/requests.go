@@ -23,6 +23,7 @@ func PlaceRequest(c *gin.Context) {
 
 		if err == nil {
 			service.Request.UserID = user.ID.String()
+			service.Request.ImageLink = "http://3.23.126.114/_nuxt/img/lan_umkm-1.a7cf81e.jpg"
 			message, err := service.PlaceRequest()
 			if err == nil {
 				api.JSONResponse(http.StatusCreated, c.Writer, gin.H{
