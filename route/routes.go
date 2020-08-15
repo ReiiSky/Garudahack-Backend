@@ -18,7 +18,7 @@ func SetupRouter() *gin.Engine {
 			v1g.POST("/signup", v1.InsertUser)
 			v1g.POST("/signin", v1.FindUser)
 			v1g.POST("/com/request", v1.PlaceRequest)
-			v1g.POST("/com/requests", v1.RequestList)
+			v1g.POST("/com/request/list", v1.RequestList)
 			v1g.GET("/gen/marketplace", v1.ProductRequestList)
 			v1g.POST("/sbo/proposals/form", v1.ProposalForm)
 			v1g.POST("/sbo/proposals", v1.ProposalList)
