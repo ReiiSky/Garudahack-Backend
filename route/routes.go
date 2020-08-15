@@ -19,6 +19,7 @@ func SetupRouter() *gin.Engine {
 			v1g.POST("/signin", v1.FindUser)
 			v1g.POST("/com/request", v1.PlaceRequest)
 			v1g.GET("/gen/marketplace", v1.ProductRequestList)
+			v1g.POST("/sbo/proposals/form", v1.ProposalForm)
 		}
 	}
 	return router
