@@ -3,7 +3,6 @@ package v1
 import (
 	"github.com/Kamva/mgm/v3"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
 // TokenValidationService service for validating the token in db
@@ -19,10 +18,14 @@ func CreateTokenValidator(token string) TokenValidationService {
 }
 
 // Validate func for validate the token
-func (service *TokenValidationService) Validate() *mongo.SingleResult {
+func (service *TokenValidationService) Validate() bool {
 	user := CreateUserService()
 	result := user.User.GetCollection().FindOne(mgm.Ctx(), bson.M{
 		"token": service.Token,
 	})
-	return result
+	result.Decode(&user.User)
+	if user.User.Token == service.Token {
+		return true
+	}
+	return false
 }

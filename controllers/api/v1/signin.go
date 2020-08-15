@@ -1,7 +1,6 @@
 package v1
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/Satssuki/Go-Service-Boilerplate/helpers"
@@ -16,7 +15,6 @@ func FindUser(c *gin.Context) {
 
 	service := v1s.CreateUserService()
 	err := helpers.ReadByteAndParse(c.Request.Body, &service.User)
-	fmt.Println(service)
 	if err == nil {
 		id, Err := service.FindUserAndUpdateToken()
 		err = Err
@@ -26,7 +24,6 @@ func FindUser(c *gin.Context) {
 			})
 			return
 		}
-		fmt.Println(err)
 	}
 	api.JSONResponse(http.StatusBadRequest, c.Writer, gin.H{
 		"status":  "failure",

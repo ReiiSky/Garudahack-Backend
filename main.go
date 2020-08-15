@@ -11,6 +11,5 @@ func main() {
 	godotenv.Load()
 	models.SetConfig()
 	models.DatabasePing()
-
 	route.SetupRouter().Run(helpers.GetPORT())
 }
