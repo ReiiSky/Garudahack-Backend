@@ -1,7 +1,6 @@
 package v1
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/Satssuki/Go-Service-Boilerplate/helpers"
@@ -36,17 +35,13 @@ func PlaceRequest(c *gin.Context) {
 
 // ProductRequestList ...
 func ProductRequestList(c *gin.Context) {
-	defer c.Request.Body.Close()
 	service := v1s.CreateRequestService()
-	err := helpers.ReadByteAndParse(c.Request.Body, &service.Request)
-	fmt.Print(service)
+	result, err := service.ProductRequestList()
 	if err == nil {
-		result, err := service.ProductRequestList()
-		if err == nil {
-			api.JSONResponse(http.StatusOK, c.Writer, gin.H{
-				"RequestList": result,
-			})
-		}
+		api.JSONResponse(http.StatusOK, c.Writer, gin.H{
+			"RequestList": result,
+		})
+		return
 	}
 
 	api.JSONResponse(http.StatusBadRequest, c.Writer, gin.H{
