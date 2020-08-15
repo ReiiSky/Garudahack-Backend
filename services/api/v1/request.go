@@ -30,3 +30,11 @@ func (request *RequestService) ProductRequestList() ([]models.Request, error) {
 	err := currentRequest.GetCollection().SimpleFind(&result, bson.M{})
 	return result, err
 }
+
+// RequestList ....
+func (request *RequestService) RequestList() ([]models.Request, error) {
+	currentRequest := &request.Request
+	result := []models.Request{}
+	err := currentRequest.GetCollection().SimpleFind(&result, bson.M{"productName": "Susu Murni "})
+	return result, err
+}

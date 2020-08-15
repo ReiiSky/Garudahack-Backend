@@ -5,6 +5,7 @@ import (
 
 	"github.com/Satssuki/Go-Service-Boilerplate/helpers"
 	"github.com/Satssuki/Go-Service-Boilerplate/helpers/api"
+	v1 "github.com/Satssuki/Go-Service-Boilerplate/services/api/v1"
 	v1s "github.com/Satssuki/Go-Service-Boilerplate/services/api/v1"
 	"github.com/gin-gonic/gin"
 )
@@ -13,24 +14,33 @@ import (
 func PlaceRequest(c *gin.Context) {
 	defer c.Request.Body.Close()
 
-	service := v1s.CreateRequestService()
-	err := helpers.ReadByteAndParse(c.Request.Body, &service.Request)
+	token := c.Request.Header.Get("Authtoken")
+	services := v1.CreateTokenValidator(token)
+	_, status := services.Validate()
 
-	if err == nil {
-		message, err := service.PlaceRequest()
+	if status {
+		service := v1s.CreateRequestService()
+		err := helpers.ReadByteAndParse(c.Request.Body, &service.Request)
+
 		if err == nil {
-			api.JSONResponse(http.StatusCreated, c.Writer, gin.H{
-				"status":  "ok",
-				"message": message,
-			})
-			return
+			message, err := service.PlaceRequest()
+			if err == nil {
+				api.JSONResponse(http.StatusOK, c.Writer, gin.H{
+					"status":  "ok",
+					"message": message,
+				})
+				return
+			}
 		}
+		api.JSONResponse(http.StatusBadRequest, c.Writer, gin.H{
+			"status":  "failure",
+			"message": err,
+		})
 	}
-
 	api.JSONResponse(http.StatusBadRequest, c.Writer, gin.H{
-		"status":  "failure",
-		"message": err,
+		"message": "user token not found",
 	})
+
 }
 
 // ProductRequestList ...
@@ -48,4 +58,29 @@ func ProductRequestList(c *gin.Context) {
 		"status":  "failure",
 		"message": err,
 	})
+}
+
+// RequestList ....
+func RequestList(c *gin.Context) {
+	defer c.Request.Body.Close()
+
+	token := c.Request.Header.Get("Authtoken")
+	services := v1.CreateTokenValidator(token)
+	_, status := services.Validate()
+
+	if status {
+		service := v1s.CreateRequestService()
+		result, err := service.RequestList()
+		if err == nil {
+			api.JSONResponse(http.StatusOK, c.Writer, gin.H{
+				"RequestList": result,
+			})
+			return
+		}
+	} else {
+		api.JSONResponse(http.StatusBadRequest, c.Writer, gin.H{
+			"message": "user token not found",
+		})
+	}
+
 }
