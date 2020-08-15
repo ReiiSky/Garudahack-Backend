@@ -21,7 +21,11 @@ func ProposalForm(c *gin.Context) {
 		err := helpers.ReadByteAndParse(c.Request.Body, &form.Form)
 		if err == nil {
 			form.Form.UserID = user.ID.String()
+			form.Form.IsActive = false
 			form.Insert()
+			api.JSONResponse(http.StatusOK, c.Writer, gin.H{
+				"message": "proposal inserted",
+			})
 		}
 	} else {
 		api.JSONResponse(http.StatusBadRequest, c.Writer, gin.H{

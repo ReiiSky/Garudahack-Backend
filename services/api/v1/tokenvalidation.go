@@ -25,7 +25,7 @@ func (service *TokenValidationService) Validate() (models.User, bool) {
 		"token": service.Token,
 	})
 	result.Decode(&user.User)
-	if user.User.Token == service.Token {
+	if user.User.Token == service.Token && len(service.Token) == 16 {
 		return user.User, true
 	}
 	return user.User, false

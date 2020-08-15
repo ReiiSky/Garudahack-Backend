@@ -23,6 +23,7 @@ func PlaceRequest(c *gin.Context) {
 
 		if err == nil {
 			service.Request.UserID = user.ID.String()
+			service.Request.ImageLink = "http://3.23.126.114/_nuxt/img/lan_umkm-1.a7cf81e.jpg"
 			message, err := service.PlaceRequest()
 			if err == nil {
 				api.JSONResponse(http.StatusCreated, c.Writer, gin.H{
@@ -62,11 +63,11 @@ func RequestList(c *gin.Context) {
 
 	token := c.Request.Header.Get("Authtoken")
 	services := v1.CreateTokenValidator(token)
-	_, status := services.Validate()
+	user, status := services.Validate()
 
 	if status {
 		service := v1s.CreateRequestService()
-		result, err := service.RequestList()
+		result, err := service.RequestList(user.ID.String())
 		if err == nil {
 			api.JSONResponse(http.StatusOK, c.Writer, gin.H{
 				"RequestList": result,
