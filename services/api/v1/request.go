@@ -32,9 +32,11 @@ func (request *RequestService) ProductRequestList() ([]models.Request, error) {
 }
 
 // RequestList ....
-func (request *RequestService) RequestList() ([]models.Request, error) {
+func (request *RequestService) RequestList(userid string) ([]models.Request, error) {
 	currentRequest := &request.Request
 	result := []models.Request{}
-	err := currentRequest.GetCollection().SimpleFind(&result, bson.M{"productName": "Susu Murni "})
+	err := currentRequest.GetCollection().SimpleFind(&result, bson.M{
+		
+	})
 	return result, err
 }
