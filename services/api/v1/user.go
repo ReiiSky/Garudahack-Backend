@@ -27,8 +27,8 @@ func (user *UserService) Insert() (string, error) {
 		_ = err
 		currentUser := &user.User
 		count, Err := currentUser.GetCollection().CountDocuments(mgm.Ctx(), bson.M{
-			"name": user.User.Name,
-			"age":  user.User.Age,
+			"name":  user.User.Name,
+			"email": user.User.Email,
 		})
 		err = Err
 		if count > 0 {
