@@ -10,7 +10,7 @@ type SBOForm struct {
 	Contract         string `bson:"contract" json:"contract"`
 	UnitPrice        int    `bson:"unitPrice" json:"unitPrice"`
 	Stok             int    `bson:"stok" json:"stok"`
-	UserID           string `bson:"userid"`
+	UserID           string `bson:"userid" json:"userid"`
 }
 
 // GetCollection return the collection of current user model
