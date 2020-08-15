@@ -35,8 +35,6 @@ func (request *RequestService) ProductRequestList() ([]models.Request, error) {
 func (request *RequestService) RequestList(userid string) ([]models.Request, error) {
 	currentRequest := &request.Request
 	result := []models.Request{}
-	err := currentRequest.GetCollection().SimpleFind(&result, bson.M{
-		
-	})
+	err := currentRequest.GetCollection().SimpleFind(&result, bson.M{"userid": userid})
 	return result, err
 }
