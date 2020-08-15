@@ -26,7 +26,7 @@ func InsertUser(c *gin.Context) {
 			return
 		} else {
 			if message != "Users created" {
-				api.JSONResponse(http.StatusOK, c.Writer, gin.H{
+				api.JSONResponse(409, c.Writer, gin.H{
 					"status":  "ok",
 					"message": message,
 				})

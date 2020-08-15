@@ -10,6 +10,7 @@ type Request struct {
 	ProductName      string `bson:"productName" json:"productName"`
 	Description      string `bson:"description" json:"description"`
 	TotalStock       int    `bson:"totalStock" json:"totalStock"`
+	UserID           string `bson:"userid"`
 }
 
 // GetCollection return the collection of current request model
