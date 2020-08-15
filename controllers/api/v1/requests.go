@@ -62,11 +62,11 @@ func RequestList(c *gin.Context) {
 
 	token := c.Request.Header.Get("Authtoken")
 	services := v1.CreateTokenValidator(token)
-	_, status := services.Validate()
+	user, status := services.Validate()
 
 	if status {
 		service := v1s.CreateRequestService()
-		result, err := service.RequestList()
+		result, err := service.RequestList(user.ID.String())
 		if err == nil {
 			api.JSONResponse(http.StatusOK, c.Writer, gin.H{
 				"RequestList": result,
