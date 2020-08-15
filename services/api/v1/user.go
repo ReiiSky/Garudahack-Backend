@@ -37,6 +37,10 @@ func (user *UserService) Insert() (string, error) {
 	return message, err
 }
 
+func (user *UserService) FindByID(id string) {
+	user.User.GetCollection().FindByID(id, &user.User)
+}
+
 // FindUserAndUpdateToken implementation of function in base interface
 func (user *UserService) FindUserAndUpdateToken() (string, error) {
 	currentUser := &user.User
