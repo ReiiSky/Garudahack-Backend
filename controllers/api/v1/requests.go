@@ -5,6 +5,7 @@ import (
 
 	"github.com/Satssuki/Go-Service-Boilerplate/helpers"
 	"github.com/Satssuki/Go-Service-Boilerplate/helpers/api"
+	v1 "github.com/Satssuki/Go-Service-Boilerplate/services/api/v1"
 	v1s "github.com/Satssuki/Go-Service-Boilerplate/services/api/v1"
 	"github.com/gin-gonic/gin"
 )
@@ -13,24 +14,29 @@ import (
 func PlaceRequest(c *gin.Context) {
 	defer c.Request.Body.Close()
 
-	service := v1s.CreateRequestService()
-	err := helpers.ReadByteAndParse(c.Request.Body, &service.Request)
+	token := c.Request.Header.Get("Authtoken")
+	service := v1.CreateTokenValidator(token)
+	user, status := service.Validate()
+	if status {
+		service := v1s.CreateRequestService()
+		err := helpers.ReadByteAndParse(c.Request.Body, &service.Request)
 
-	if err == nil {
-		message, err := service.PlaceRequest()
 		if err == nil {
-			api.JSONResponse(http.StatusCreated, c.Writer, gin.H{
-				"status":  "ok",
-				"message": message,
-			})
-			return
+			service.Request.UserID = user.ID.String()
+			message, err := service.PlaceRequest()
+			if err == nil {
+				api.JSONResponse(http.StatusCreated, c.Writer, gin.H{
+					"status":  "ok",
+					"message": message,
+				})
+				return
+			}
 		}
+	} else {
+		api.JSONResponse(http.StatusBadRequest, c.Writer, gin.H{
+			"message": "user token not found",
+		})
 	}
-
-	api.JSONResponse(http.StatusBadRequest, c.Writer, gin.H{
-		"status":  "failure",
-		"message": err,
-	})
 }
 
 // ProductRequestList ...
