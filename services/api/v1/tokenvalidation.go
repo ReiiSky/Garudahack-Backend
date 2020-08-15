@@ -2,6 +2,7 @@ package v1
 
 import (
 	"github.com/Kamva/mgm/v3"
+	"github.com/Satssuki/Go-Service-Boilerplate/models"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
@@ -18,14 +19,14 @@ func CreateTokenValidator(token string) TokenValidationService {
 }
 
 // Validate func for validate the token
-func (service *TokenValidationService) Validate() bool {
+func (service *TokenValidationService) Validate() (models.User, bool) {
 	user := CreateUserService()
 	result := user.User.GetCollection().FindOne(mgm.Ctx(), bson.M{
 		"token": service.Token,
 	})
 	result.Decode(&user.User)
 	if user.User.Token == service.Token {
-		return true
+		return user.User, true
 	}
-	return false
+	return user.User, false
 }
