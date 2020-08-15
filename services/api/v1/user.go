@@ -50,7 +50,7 @@ func (user *UserService) FindUserAndUpdateToken() (string, error) {
 	result.Decode(&userDecoded)
 	if userDecoded.Email == user.User.Email && userDecoded.Password == user.User.Password {
 		userDecoded.Token = generatedID
-		object, err := currentUser.GetCollection().UpdateOne(mgm.Ctx(), filter, bson.M{
+		_, err := currentUser.GetCollection().UpdateOne(mgm.Ctx(), filter, bson.M{
 			"$set": bson.M{
 				"token": generatedID,
 			},
