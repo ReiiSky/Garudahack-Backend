@@ -1,7 +1,6 @@
 package v1
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/Satssuki/Go-Service-Boilerplate/helpers"
@@ -17,7 +16,6 @@ func ProposalForm(c *gin.Context) {
 	token := c.Request.Header.Get("Authtoken")
 	service := v1.CreateTokenValidator(token)
 	user, status := service.Validate()
-	fmt.Println(user, status, token)
 	if status {
 		form := v1.CreateSBOFormService()
 		err := helpers.ReadByteAndParse(c.Request.Body, &form.Form)
