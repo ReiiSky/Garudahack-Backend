@@ -12,6 +12,7 @@ type User struct {
 	Password         string `bson:"password" json:"password"`
 	Role             string `bson:"role" json:"role"`
 	OrganizationName string `bson:"organizationName" json:"organizationName"`
+	Token            string `bson:"token"`
 }
 
 // GetCollection return the collection of current user model

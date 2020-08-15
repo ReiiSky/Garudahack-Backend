@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"github.com/Kamva/mgm/v3"
+	"github.com/Satssuki/Go-Service-Boilerplate/helpers"
 	"github.com/Satssuki/Go-Service-Boilerplate/models"
 	"go.mongodb.org/mongo-driver/bson"
 )
@@ -26,7 +27,7 @@ func (user *UserService) Insert() (string, error) {
 		"name":  user.User.Name,
 		"email": user.User.Email,
 	})
-	
+
 	if count > 0 {
 		message = "Users already defined"
 		err = errors.New(message)
@@ -34,4 +35,27 @@ func (user *UserService) Insert() (string, error) {
 		err = currentUser.GetCollection().Create(currentUser)
 	}
 	return message, err
+}
+
+// FindUserAndUpdateToken implementation of function in base interface
+func (user *UserService) FindUserAndUpdateToken() (string, error) {
+	currentUser := &user.User
+	filter := bson.M{
+		"email":    user.User.Email,
+		"password": user.User.Password,
+	}
+	generatedID := helpers.GenerateID(16)
+	result := currentUser.GetCollection().FindOne(mgm.Ctx(), filter)
+	userDecoded := models.User{}
+	result.Decode(&userDecoded)
+	if userDecoded.Email == user.User.Email && userDecoded.Password == user.User.Password {
+		userDecoded.Token = generatedID
+		object, err := currentUser.GetCollection().UpdateOne(mgm.Ctx(), filter, bson.M{
+			"$set": bson.M{
+				"token": generatedID,
+			},
+		})
+		return generatedID, err
+	}
+	return "", errors.New("Could not find an user.")
 }
