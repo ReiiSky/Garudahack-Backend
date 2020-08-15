@@ -56,3 +56,28 @@ func ProductRequestList(c *gin.Context) {
 		"message": err,
 	})
 }
+
+// RequestList ....
+func RequestList(c *gin.Context) {
+	defer c.Request.Body.Close()
+
+	token := c.Request.Header.Get("Authtoken")
+	services := v1.CreateTokenValidator(token)
+	_, status := services.Validate()
+
+	if status {
+		service := v1s.CreateRequestService()
+		result, err := service.RequestList()
+		if err == nil {
+			api.JSONResponse(http.StatusOK, c.Writer, gin.H{
+				"RequestList": result,
+			})
+			return
+		}
+	} else {
+		api.JSONResponse(http.StatusBadRequest, c.Writer, gin.H{
+			"message": "user token not found",
+		})
+	}
+
+}
