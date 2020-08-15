@@ -9,32 +9,22 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// InsertUser sample controller to perform insert user function
-func InsertUser(c *gin.Context) {
+// FindUser to find user
+func FindUser(c *gin.Context) {
 	defer c.Request.Body.Close()
 
 	service := v1s.CreateUserService()
 	err := helpers.ReadByteAndParse(c.Request.Body, &service.User)
-
 	if err == nil {
-		message, err := service.Insert()
+		id, Err := service.FindUserAndUpdateToken()
+		err = Err
 		if err == nil {
-			api.JSONResponse(http.StatusCreated, c.Writer, gin.H{
-				"status":  "ok",
-				"message": message,
+			api.JSONResponse(http.StatusOK, c.Writer, gin.H{
+				"authtoken": id,
 			})
 			return
-		} else {
-			if message != "Users created" {
-				api.JSONResponse(http.StatusOK, c.Writer, gin.H{
-					"status":  "ok",
-					"message": message,
-				})
-				return
-			}
 		}
 	}
-
 	api.JSONResponse(http.StatusBadRequest, c.Writer, gin.H{
 		"status":  "failure",
 		"message": err,

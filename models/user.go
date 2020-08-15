@@ -8,7 +8,11 @@ import (
 type User struct {
 	mgm.DefaultModel `bson:",inline"`
 	Name             string `bson:"name" json:"name"`
-	Age              int    `bson:"age"  json: "age"`
+	Email            string `bson:"email" json:"email"`
+	Password         string `bson:"password" json:"password"`
+	Role             string `bson:"role" json:"role"`
+	OrganizationName string `bson:"organizationName" json:"organizationName"`
+	Token            string `bson:"token"`
 }
 
 // GetCollection return the collection of current user model

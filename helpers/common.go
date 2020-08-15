@@ -1,6 +1,8 @@
 package helpers
 
 import (
+	"crypto/rand"
+	"fmt"
 	"os"
 	"strings"
 
@@ -44,4 +46,13 @@ func Error(err error) {
 			Error().
 			Msg(err.Error())
 	}
+}
+
+// GenerateID
+func GenerateID(length int) string {
+	bytes := make([]byte, length/2)
+	if _, err := rand.Read(bytes); err != nil {
+		panic(err)
+	}
+	return fmt.Sprintf("%X", bytes)
 }
